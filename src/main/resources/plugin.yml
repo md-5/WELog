@@ -1,0 +1,7 @@
+name: WELog
+version: 1.0.0
+description: Simple WorldEdit command logging
+author: md_5
+website: https://github.com/md-5/WELog
+
+main: com.md_5.welog.WELog

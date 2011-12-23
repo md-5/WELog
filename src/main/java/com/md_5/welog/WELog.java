@@ -21,8 +21,8 @@ public class WELog extends JavaPlugin {
 
     public static final Logger logger = Bukkit.getServer().getLogger();
     public String path;
+    public String fileType;
     public boolean console;
-
     public static final String DATE_FORMAT = "MM/dd/yyyy";
     public static final String TIME_FORMAT = "HH:mm:ss";
 
@@ -31,7 +31,7 @@ public class WELog extends JavaPlugin {
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
         return sdf.format(cal.getTime());
     }
-    
+
     public static String currTime() {
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat(TIME_FORMAT);
@@ -43,7 +43,7 @@ public class WELog extends JavaPlugin {
         conf.options().copyDefaults(true);
         path = conf.getString("path");
         console = conf.getBoolean("console");
-        filetype = conf.getString("type");
+        fileType = conf.getString("type");
         saveConfig();
         getServer().getPluginManager().registerEvent(Type.PLAYER_COMMAND_PREPROCESS, new PlayerListener() {
 
@@ -58,22 +58,17 @@ public class WELog extends JavaPlugin {
                         Logger.getLogger(WELog.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     Location l = event.getPlayer().getLocation();
-                    
-                    /*
-                      Log as .csv, .txt, or .log
-                    */
-                    if(filetype.equals("csv")){
-                    String output = event.getMessage() + "," + event.getPlayer().getName()
-                            + "," + l.getWorld().getName() + "," + l.getBlockX() + "," + l.getBlockX() + "," + l.getBlockZ() + "\n";
-                    }else if(filetype.equals("txt")){
-                    String output = "["+currDate()+"]["+currTime()+"] User "+event.getPlayer().getName()+" used command "+event.getMessage()+" at location (X:"+l.getBlockX()+" Y:"+l.getBlockY()+" Z:"+l.getBlockZ()+") in world "+l.getWorld().getName()+"\n";
-                    }else if(filetype.equals("log")){
-                    String output = "["+currDate()+"]["+currTime()+"] [INFO] User "+event.getPlayer().getName()+" used command "+event.getMessage()+" at location (X:"+l.getBlockX()+" Y:"+l.getBlockY()+" Z:"+l.getBlockZ()+") in world "+l.getWorld().getName()+"\n";    
+                    String output = "";
+                    if (fileType.equalsIgnoreCase("csv")) {
+                        output = event.getMessage() + "," + event.getPlayer().getName()
+                                + "," + l.getWorld().getName() + "," + l.getBlockX() + "," + l.getBlockX() + "," + l.getBlockZ() + "\n";
+                    } else if (fileType.equalsIgnoreCase("txt")) {
+                        output = "[" + currDate() + "][" + currTime() + "] User " + event.getPlayer().getName() + " used command " + event.getMessage() + " at location (X:" + l.getBlockX() + " Y:" + l.getBlockY() + " Z:" + l.getBlockZ() + ") in world " + l.getWorld().getName() + "\n";
+                    } else if (fileType.equalsIgnoreCase("log")) {
+                        output = "[" + currDate() + "][" + currTime() + "] [INFO] User " + event.getPlayer().getName() + " used command " + event.getMessage() + " at location (X:" + l.getBlockX() + " Y:" + l.getBlockY() + " Z:" + l.getBlockZ() + ") in world " + l.getWorld().getName() + "\n";
                     }
-                    
-                    Worldedit Displays Commands
                     if (console) {
-                      getServer().getLogger().info("[WELog] User "+event.getPlayer().getName()+" used command "+event.getMessage()+" at location (X:"+l.getBlockX()+" Y:"+l.getBlockY()+" Z:"+l.getBlockZ()+") in world "+l.getWorld().getName());
+                        getServer().getLogger().info("[WELog] User " + event.getPlayer().getName() + " used command " + event.getMessage() + " at location (X:" + l.getBlockX() + " Y:" + l.getBlockY() + " Z:" + l.getBlockZ() + ") in world " + l.getWorld().getName());
                     }
                     try {
                         BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));

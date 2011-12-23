@@ -43,7 +43,7 @@ public class WELog extends JavaPlugin {
         conf.options().copyDefaults(true);
         path = conf.getString("path");
         console = conf.getBoolean("console");
-        fileType = conf.getString("type");
+        fileType = conf.getString("filetype");
         saveConfig();
         getServer().getPluginManager().registerEvent(Type.PLAYER_COMMAND_PREPROCESS, new PlayerListener() {
 

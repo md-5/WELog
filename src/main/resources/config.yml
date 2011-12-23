@@ -1,3 +1,10 @@
 # WELog by md_5
+
+#Path to Log File
 path: plugins\WELog\log.csv
+
+#Should commands be shown in the console?
 console: false
+
+#Valid Types: csv, log, txt
+filetype: csv
